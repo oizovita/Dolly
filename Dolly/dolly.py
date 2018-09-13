@@ -43,7 +43,6 @@ def parser_excel_file(number):
 
         j = j + 1
 
-    print(data)
     return data
 
 
