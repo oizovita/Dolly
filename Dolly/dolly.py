@@ -1,11 +1,7 @@
 import os
-from sys import argv
+import argparse
 from xlrd import open_workbook
 from docxtpl import DocxTemplate
-
-if len(argv) <= 3:
-    print("Not arguments")
-    exit()
 
 
 # Checks if the folder already exists
@@ -36,7 +32,7 @@ def parser_excel_file(number):
     data = {}
     j = 0
     for row in sheet.row(0):
-        if type(sheet.row(number)[j].value) == float:
+        if type(sheet.row(number)[j].value) == float and sheet.row(number)[j].value == int(sheet.row(number)[j].value):
             data[row.value.replace(" ", "")] = int(sheet.row(number)[j].value)
         else:
             data[row.value.replace(" ", "")] = sheet.row(number)[j].value
@@ -49,18 +45,25 @@ def parser_excel_file(number):
 # Substitute the value from the dictionary into
 # the tamplate and create as many records as the rows
 
-def substitution_into_a_template():
+def substitution_into_a_template(template, output_folder):
     for i in range(1, len(sheet.col(0))):
-        doc = DocxTemplate(argv[2])
+        doc = DocxTemplate(template)
         doc.render(parser_excel_file(i))
-        doc.save(argv[3] + '/Invoice{0}.docx'.format(i))
+        doc.save(output_folder + '/Invoice{0}.docx'.format(i))
 
 
-verification_of_paths(argv[1], argv[2])
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Template script')
+    parser.add_argument('data', action="store", help="path to the data file")
+    parser.add_argument('template', action="store", help="path to the template file")
+    parser.add_argument('output_folder', action="store", help="folder path with output")
+    args = parser.parse_args()
 
-book = open_workbook(argv[1], on_demand=True)
-sheet = book.sheet_by_name(book.sheet_names()[0])
+    verification_of_paths(args.data, args.template)
 
-create_folder(argv[3])
+    book = open_workbook(args.data, on_demand=True)
+    sheet = book.sheet_by_name(book.sheet_names()[0])
 
-substitution_into_a_template()
+    create_folder(args.output_folder)
+
+    substitution_into_a_template(args.template, args.output_folder)
