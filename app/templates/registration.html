@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{%  block title %}
+    Login
+{% endblock %}
+  
+  	
+{%  block content %}
+    <form action="{{url_for('registration')}}" class="form-signin text-center" method="POST">
+      <img class="mb-4" src="../static/icons.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+      <label for="inputLogin" class="sr-only">Login</label>
+      <input id="inputLogin" class="form-control" placeholder="Login" required="" autofocus="" type="login" name="login">
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="" type="email" name="email">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input id="inputPassword" class="form-control" placeholder="Password" required="" type="password" name="password">
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+      <p style="color:red">{{message}}</p>
+    </form>
+{% endblock %}
+   
+
+  
+
+</html>
